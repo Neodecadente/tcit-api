@@ -4,13 +4,14 @@ using TCIT_API.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<PostContext>(opt => opt.UseInMemoryDatabase("PostList"));
+
+var connectionString = builder.Configuration.GetConnectionString("PsqlConnection");
+builder.Services.AddDbContext<PostContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
