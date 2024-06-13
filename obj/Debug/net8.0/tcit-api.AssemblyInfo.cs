@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("tcit-api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec18a14b6e2e0ae9a475fa14a041f57f03c49108")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3eaacc595c5e9262058507fc2328acd76ed49fae")]
 [assembly: System.Reflection.AssemblyProductAttribute("tcit-api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("tcit-api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
