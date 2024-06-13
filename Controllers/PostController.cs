@@ -2,9 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TCIT_API.Data;
 using TCIT_API.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Diagnostics;
 
 namespace TCIT_API.Controllers
 {
@@ -22,33 +19,67 @@ namespace TCIT_API.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
     {
-      var posts = await _context.Posts.ToListAsync();
-      return Ok(posts);
+      try
+      {
+        var posts = await _context.Posts.ToListAsync();
+        return Ok(posts);
+      }
+      catch (Exception ex)
+      {
+        return StatusCode(500, "Internal server error");
+      }
     }
 
     [HttpPost]
     public async Task<ActionResult<Post>> CreatePost(Post post)
     {
-      _context.Posts.Add(post);
-      await _context.SaveChangesAsync();
+      try
+      {
+        if (!ModelState.IsValid)
+        {
+          return BadRequest(ModelState);
+        }
 
-      return StatusCode(201, post);
+        _context.Posts.Add(post);
+        await _context.SaveChangesAsync();
+
+        return StatusCode(201, post);
+      }
+      catch (DbUpdateException dbEx)
+      {
+        return StatusCode(500, "A database error occurred");
+      }
+      catch (Exception ex)
+      {
+        return StatusCode(500, "Internal server error");
+      }
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePost(long id)
     {
-      var post = await _context.Posts.FindAsync(id);
-
-      if (post == null)
+      try
       {
-        return NotFound();
+        var post = await _context.Posts.FindAsync(id);
+
+        if (post == null)
+        {
+          return NotFound();
+        }
+
+        _context.Posts.Remove(post);
+        await _context.SaveChangesAsync();
+
+        return Ok(post);
+      } 
+      catch (DbUpdateException dbEx)
+      {
+        return StatusCode(500, "A database error occurred");
       }
-
-      _context.Posts.Remove(post);
-      await _context.SaveChangesAsync();
-
-      return Ok(post);
+      catch (Exception ex)
+      {
+        return StatusCode(500, "Internal server error");
+      }
     }
 
   }
